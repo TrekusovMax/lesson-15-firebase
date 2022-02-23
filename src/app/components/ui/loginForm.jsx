@@ -19,7 +19,7 @@ const LoginForm = () => {
             [target.name]: target.value
         }));
     };
-    const { signIn } = useAuth();
+    const { logIn } = useAuth();
     const validatorConfig = {
         email: {
             isRequired: {
@@ -63,7 +63,7 @@ const LoginForm = () => {
         if (!isValid) return;
 
         try {
-            await signIn(data);
+            await logIn(data);
             history.push("/");
         } catch (error) {
             setErrors(error);
