@@ -22,6 +22,7 @@ export const useAuth = () => {
 const AuthProvider = ({ children }) => {
     const [currentUser, setUser] = useState();
     const [error, setError] = useState(null);
+    const [isLoading, setLoading] = useState(true);
 
     const randomInt = (min, max) => {
         return Math.floor(Math.random() * (max - min + 1) + min);
@@ -68,7 +69,7 @@ const AuthProvider = ({ children }) => {
                 returnSecureToken: true
             });
             setTokens(data);
-            getUserData();
+            await getUserData();
         } catch (error) {
             errorCatcher(error);
             const { code, message } = error.response.data.error;
@@ -104,19 +105,25 @@ const AuthProvider = ({ children }) => {
         const { message } = error.response.data;
         setError(message);
     }
+
+    useEffect(() => {
+        if (localStorageService.getAccessToken) {
+            getUserData();
+        } else {
+            setLoading(false);
+        }
+    }, []);
+
     async function getUserData() {
         try {
             const { content } = await userService.getCurrentUser();
             setUser(content);
         } catch (error) {
             errorCatcher(error);
+        } finally {
+            setLoading(false);
         }
     }
-    useEffect(() => {
-        if (localStorageService.getAccessToken) {
-            getUserData();
-        }
-    }, []);
 
     useEffect(() => {
         if (error !== null) {
@@ -127,7 +134,7 @@ const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{ signUp, logIn, currentUser }}>
-            {children}
+            {!isLoading ? children : "Loading..."}
         </AuthContext.Provider>
     );
 };
