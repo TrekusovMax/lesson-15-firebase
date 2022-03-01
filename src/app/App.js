@@ -9,6 +9,7 @@ import { ProfessionProvider } from "./hooks/useProfession";
 import { QualitiesProvider } from "./hooks/useQualities";
 import AuthProvider from "./hooks/useAuth";
 import ProtectedRoute from "./components/common/protectedRoute";
+import LogOut from "./layouts/logout";
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                                 path="/users/:userId?/:edit?"
                                 component={Users}
                             />
+                            <Route path="/logout" component={LogOut} />
                             <Route path="/login/:type?" component={Login} />
                             <Route path="/" exact component={Main} />
                             <Redirect to="/" />

@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import localStorageService, {
     setTokens
 } from "../services/localStorage.service";
+import { useHistory } from "react-router-dom";
 
 const AuthContext = React.createContext();
 export const httpAuth = axios.create({
@@ -23,7 +24,7 @@ const AuthProvider = ({ children }) => {
     const [currentUser, setUser] = useState();
     const [error, setError] = useState(null);
     const [isLoading, setLoading] = useState(true);
-
+    const history = useHistory();
     const randomInt = (min, max) => {
         return Math.floor(Math.random() * (max - min + 1) + min);
     };
@@ -43,6 +44,11 @@ const AuthProvider = ({ children }) => {
                 email,
                 rate: randomInt(1, 5),
                 completedMeetings: randomInt(0, 200),
+                image: `https://avatars.dicebear.com/api/avataaars/${(
+                    Math.random() + 1
+                )
+                    .toString(36)
+                    .substring(7)}.svg`,
                 ...rest
             });
         } catch (error) {
@@ -106,6 +112,11 @@ const AuthProvider = ({ children }) => {
         setError(message);
     }
 
+    function logOut() {
+        localStorageService.removeAuthData();
+        setUser(null);
+        history.push("/");
+    }
     useEffect(() => {
         if (localStorageService.getAccessToken) {
             getUserData();
@@ -133,7 +144,7 @@ const AuthProvider = ({ children }) => {
     }, [error]);
 
     return (
-        <AuthContext.Provider value={{ signUp, logIn, currentUser }}>
+        <AuthContext.Provider value={{ signUp, logIn, currentUser, logOut }}>
             {!isLoading ? children : "Loading..."}
         </AuthContext.Provider>
     );

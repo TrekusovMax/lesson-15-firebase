@@ -33,6 +33,13 @@ export function getLoginStatus() {
 export function getUserId() {
     return localStorage.getItem(USERID_KEY);
 }
+export function removeAuthData() {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(REFRESH_KEY);
+    localStorage.removeItem(EXPIRES_KEY);
+    localStorage.removeItem(LOGIN_STATUS);
+    localStorage.removeItem(USERID_KEY);
+}
 
 const localStorageService = {
     setTokens,
@@ -40,7 +47,8 @@ const localStorageService = {
     getRefreshToken,
     getTokenExpiresDate,
     getLoginStatus,
-    getUserId
+    getUserId,
+    removeAuthData
 };
 
 export default localStorageService;

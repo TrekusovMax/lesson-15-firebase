@@ -32,7 +32,9 @@ const NavProfile = () => {
                 >
                     Profile
                 </Link>
-                <Link to="logout" className="dropdown-item" />
+                <Link to="logout" className="dropdown-item">
+                    Logout
+                </Link>
             </div>
         </div>
     );
