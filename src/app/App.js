@@ -23,8 +23,8 @@ function App() {
                                 path="/users/:userId?/:edit?"
                                 component={Users}
                             />
-                            <Route path="/logout" component={LogOut} />
                             <Route path="/login/:type?" component={Login} />
+                            <Route path="/logout" component={LogOut} />
                             <Route path="/" exact component={Main} />
                             <Redirect to="/" />
                         </Switch>

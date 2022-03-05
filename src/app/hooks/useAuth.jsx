@@ -25,6 +25,7 @@ const AuthProvider = ({ children }) => {
     const [error, setError] = useState(null);
     const [isLoading, setLoading] = useState(true);
     const history = useHistory();
+
     const randomInt = (min, max) => {
         return Math.floor(Math.random() * (max - min + 1) + min);
     };
@@ -100,7 +101,6 @@ const AuthProvider = ({ children }) => {
     async function createUser(data) {
         try {
             const { content } = await userService.create(data);
-            console.log(content);
             setUser(content);
         } catch (error) {
             errorCatcher(error);
@@ -143,8 +143,19 @@ const AuthProvider = ({ children }) => {
         }
     }, [error]);
 
+    async function updateUserData(data) {
+        try {
+            const { content } = await userService.update(data);
+            setUser(content);
+        } catch (error) {
+            errorCatcher(error);
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{ signUp, logIn, currentUser, logOut }}>
+        <AuthContext.Provider
+            value={{ signUp, logIn, currentUser, logOut, updateUserData }}
+        >
             {!isLoading ? children : "Loading..."}
         </AuthContext.Provider>
     );
